@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Tooltip from 'rc-tooltip';
 import * as d3Scale from 'd3-scale';
 
 const Axis = ({x, endX, y, startVal, endVal, ticks}) => {
@@ -134,6 +135,14 @@ const Tangle = props =>
       </g>
       <g>
         {props.nodes.map(node =>
+          <Tooltip
+            visible={props.hoveredNode === node}
+            key={node.name}
+            placement='top'
+            overlay={
+              <div>Cumulative weight: {props.hoveredNodeWeight}<br />
+              Score: {props.hoveredNodeScore}</div>}
+            >
           <g transform={`translate(${node.x},${node.y})`} key={node.name}
             className={
               `${props.approvedNodes.has(node) ? 'approved' :
@@ -156,7 +165,8 @@ const Tangle = props =>
               pointerEvents='none'>
               {node.name}
             </text>}
-          </g>)}
+          </g>
+          </Tooltip>)}
       </g>
       <g>
         <Axis
@@ -186,6 +196,8 @@ Tangle.propTypes = {
   approvingNodes: PropTypes.any,
   approvingLinks: PropTypes.any,
   hoveredNode: PropTypes.any,
+  hoveredNodeWeight: PropTypes.any,
+  hoveredNodeScore: PropTypes.any
 };
 
 export default Tangle;
