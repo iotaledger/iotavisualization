@@ -65,6 +65,9 @@ const lambdaDefault = 1.5;
 const alphaMin = 0;
 const alphaMax = 5;
 const alphaDefault = 0.5;
+const cwfMin = 1;
+const cwfMax = 500;
+const cwfDefault = 10;
 
 const Handle = Slider.Handle;
 const sliderHandle = props => {
@@ -117,6 +120,7 @@ class TangleContainer extends React.Component {
       nodeCount: nodeCountDefault,
       lambda: lambdaDefault,
       alpha: alphaDefault,
+      cwf: cwfDefault,
       width: 300, // default values
       height: 300,
       nodeRadius: getNodeRadius(nodeCountDefault),
@@ -171,6 +175,7 @@ class TangleContainer extends React.Component {
       nodeCount: this.state.nodeCount,
       lambda: this.state.lambda,
       alpha: this.state.alpha,
+      cwf: this.state.cwf,
       nodeRadius,
       tipSelectionAlgorithm: tipSelectionDictionary[this.state.tipSelectionAlgorithm].algo,
     });
@@ -263,6 +268,7 @@ class TangleContainer extends React.Component {
     const {nodeCount,lambda,alpha, width, height} = this.state;
     const approved = this.getApprovedNodes(this.state.hoveredNode);
     const approving = this.getApprovingNodes(this.state.hoveredNode);
+    const all_approving = this.state.nodes.map(tx => this.getApprovingNodes(tx).nodes.size);
 
     return (
       <div>
@@ -339,6 +345,23 @@ class TangleContainer extends React.Component {
                 onChange={this.handleTipSelectionRadio.bind(this)} />
             </div>
           </div>
+          <div className='top-bar-row'>
+            <div className='slider-title'>Cumulative Weight Filter</div>
+            <div className='slider-container'>
+              <SliderContainer
+                min={cwfMin}
+                max={cwfMax}
+                step={1}
+                defaultValue={cwfDefault}
+                marks={{[cwfMin]: `${cwfMin}`, [cwfMax]: `${cwfMax}`}}
+                handle={sliderHandle}
+                onChange={cwf => {
+                  this.setState(Object.assign(this.state, {cwf}));
+                }} />
+            </div>
+            <div className='tip-algo-label'>
+            </div>
+          </div>
         </div>
         <Tangle links={this.state.links} nodes={this.state.nodes}
           nodeCount={6}
@@ -354,6 +377,8 @@ class TangleContainer extends React.Component {
           approvingNodes={approving.nodes}
           approvingLinks={approving.links}
           hoveredNode={this.state.hoveredNode}
+          allApproving={all_approving}
+          cwf={this.state.cwf}
           tips={getTips({
             nodes: this.state.nodes,
             links: this.state.links,

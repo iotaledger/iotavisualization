@@ -138,7 +138,8 @@ const Tangle = props =>
             className={
               `${props.approvedNodes.has(node) ? 'approved' :
                  props.approvingNodes.has(node) ? 'approving' :
-                 props.tips.has(node) ? 'tip' : ''}`}>
+                 props.tips.has(node) ? 'tip' :
+                 props.allApproving[node.name] > props.cwf ? 'threshold' : ''}`}>
             {props.hoveredNode === node &&
               <g style={{opacity: 0.4}}>
                 <Node nodeRadius={props.nodeRadius*1.6} />
