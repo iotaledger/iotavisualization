@@ -22,8 +22,8 @@
       new Fingerprint2({detectScreenOrientation:false}).get(function(result){
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'UA-113325485-1', {'storage': 'none', 'clientId':result});
-        gtag('set', 'anonymizeIp', true);
+        gtag('config', 'UA-113325485-1', {'storage': 'none', 'user_id':result, 'store_gac': false});
+        gtag('set', 'anonymize_ip', true);
         gtag('send', 'pageview');
       });
     });
